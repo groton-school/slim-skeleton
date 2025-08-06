@@ -11,10 +11,10 @@ This skeleton application was built for Composer. This makes setting up a new Sl
 Run this command from the directory in which you want to install your new Slim Framework application. You will require PHP 7.4 or newer.
 
 ```bash
-composer create-project --stability dev groton-school/slim-skeleton [my-app-name] "dev-lti/gae"
+composer create-project --ask --stability dev --repository "{\"type\":\"vcs\",\"url\":\"https://github.com/groton-school/slim-skeleton\"}" groton-school/slim-skeleton "dev-lti/gae"
 ```
 
-Replace `[my-app-name]` with the desired directory name for your new application. You'll want to:
+You'll want to:
 
 - Point your virtual host document root to your new application's `public/` directory.
 - Ensure `logs/` is web writable.
