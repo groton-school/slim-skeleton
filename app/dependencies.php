@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Application\Handlers\LaunchHandler;
+use App\Application\Settings\Settings;
 use App\Application\Settings\SettingsInterface;
 use DI\ContainerBuilder;
 use Google\Cloud\Logging\LoggingClient;
@@ -18,6 +18,7 @@ use GrotonSchool\Slim\LTI\Infrastructure\CookieInterface;
 use GrotonSchool\Slim\LTI\Infrastructure\DatabaseInterface;
 use GrotonSchool\Slim\LTI\Infrastructure\GAE\Cache;
 use GrotonSchool\Slim\LTI\Infrastructure\GAE\Database;
+use GrotonSchool\Slim\LTI\PartitionedSession\Handlers\LaunchHandler;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
@@ -28,6 +29,7 @@ use Packback\Lti1p3\Interfaces\ILtiServiceConnector;
 use Packback\Lti1p3\LtiServiceConnector;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Views\PhpRenderer;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -60,7 +62,7 @@ return function (ContainerBuilder $containerBuilder) {
         /*
         * autowire registration configuration passthru (no interactive
         * configuration)
-        * 
+        *
         * to set up interactive configurattion of the registration, implement
         * (and autowire) GrotonSchool\Slim\LTI\Actions\RegistrationConfigureActionInterface
         *
@@ -77,5 +79,11 @@ return function (ContainerBuilder $containerBuilder) {
             $options = $container->get(SettingsInterface::class)->get(SessionInterface::class);
             return new PhpSession($options);
         },
+
+        PhpRenderer::class => function (ContainerInterface $container) {
+            return new PhpRenderer(__DIR__ . '/../views', [
+                'tool_name' => $container->get(SettingsInterface::class)->get(Settings::TOOL_NAME)
+            ]);
+        }
     ]);
 };

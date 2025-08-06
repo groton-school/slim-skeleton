@@ -1,4 +1,4 @@
-# Slim Framework 4 on Google App Engine Skeleton Application
+# Slim Framework 4 on Google App Engine Skeleton LTI Tool
 
 [![Coverage Status](https://coveralls.io/repos/github/groton-school/slim-lti-gae-skeleton/badge.svg?branch=master)](https://coveralls.io/github/groton-school/slim-lti-gae-skeleton?branch=master)
 

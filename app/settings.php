@@ -12,7 +12,7 @@ return function (ContainerBuilder $containerBuilder) {
     // Global Settings Object
     $containerBuilder->addDefinitions([
         SettingsInterface::class => function () {
-            $TOOL_NAME = 'slim-lti-gae-skeleton';
+            $TOOL_NAME = 'LTI Google App Engine Example';
             $PROJECT_URL = 'https://' . getenv('HTTP_HOST');
             $SCOPES = ['https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly'];
             return new Settings([
