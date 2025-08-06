@@ -2,7 +2,8 @@
   "description": "Provide Node-based deployment wizard to Google App Engine",
   "type": "module",
   "scripts": {
-    "deploy": "node ./scripts/deploy.js -v"
+    "deploy": "node ./scripts/deploy.js -v",
+    "deploy:1Password": "node ./scripts/deploy.js -v --serviceAccountToken=\"$(op item get OP_SERVICE_ACCOUNT_TOKEN --fields credential --reveal)\""
   },
   "devDependencies": {
     "@battis/partly-gcloudy": "^1.4.1",

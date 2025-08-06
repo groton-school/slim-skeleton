@@ -1,15 +1,15 @@
+import '@qui-cli/env/1Password.js';
+
 import gcloud from '@battis/partly-gcloudy';
-import { Colors } from '@battis/qui-cli.colors';
-import { Core } from '@battis/qui-cli.core';
-import { Env } from '@battis/qui-cli.env';
-import { Log } from '@battis/qui-cli.log';
-import { Root } from '@battis/qui-cli.root';
-import { Shell } from '@battis/qui-cli.shell';
+import { Colors } from '@qui-cli/colors';
+import { Core } from '@qui-cli/core';
+import { Log } from '@qui-cli/log';
+import { Root } from '@qui-cli/root';
+import { Shell } from '@qui-cli/shell';
 import path from 'node:path';
 
 (async () => {
   Root.configure({ root: path.dirname(import.meta.dirname) });
-  Env.configure();
   const {
     values: { force }
   } = await Core.init({
@@ -40,7 +40,7 @@ import path from 'node:path';
   }
 
   Log.info(
-    `Install your LTI by going adding an LTI Registration in Developer Keys for ${Colors.url(
+    `Install your LTI by adding an LTI Registration in Developer Keys for ${Colors.url(
       `https://${appEngine.defaultHostname}/lti/register`
     )}\n\nIf you haven't done that before, follow these directions: ${Colors.url(
       'https://community.canvaslms.com/t5/Admin-Guide/How-do-I-add-a-developer-LTI-Registration-key-for-an-account/ta-p/601370'
