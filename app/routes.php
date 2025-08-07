@@ -13,7 +13,7 @@ use GrotonSchool\Slim\LTI\PartitionedSession\Actions\FirstPartyLaunchAction;
 use GrotonSchool\Slim\LTI\PartitionedSession\Actions\RequestStorageAccessAction;
 use GrotonSchool\Slim\LTI\PartitionedSession\Actions\ThirdPartyCookieAction;
 use GrotonSchool\Slim\LTI\PartitionedSession\Actions\ValidateSessionAction;
-use GrotonSchool\Slim\LTI\PartitionedSession\Middleware\PartitionedSession;
+use GrotonSchool\Slim\LTI\PartitionedSession\Middleware\PartitionedSessionMiddleware;
 use Odan\Session\Middleware\SessionStartMiddleware;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
@@ -34,10 +34,10 @@ return function (App $app) {
         $lti->get('/validate-session', ValidateSessionAction::class);
     })
         ->add(SessionStartMiddleware::class)
-        ->add(PartitionedSession::class);
+        ->add(PartitionedSessionMiddleware::class);
 
     $app->get('/', AppStartAction::class)
         ->add(Authenticated::class)
         ->add(SessionStartMiddleware::class)
-        ->add(PartitionedSession::class);
+        ->add(PartitionedSessionMiddleware::class);
 };
