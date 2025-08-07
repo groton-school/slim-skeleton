@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Application\Actions\AppStartAction;
 use App\Application\Middleware\Authenticated;
-use GrotonSchool\Slim\GAE\Actions\EmptyAction;
+use GrotonSchool\Slim\GAE;
 use GrotonSchool\Slim\LTI\Actions\JWKSAction;
 use GrotonSchool\Slim\LTI\Actions\LaunchAction;
 use GrotonSchool\Slim\LTI\Actions\LoginAction;
@@ -19,8 +19,7 @@ use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
-    // return an empty string on GAE start/stop requests
-    $app->get('/_ah/{action:.*}', EmptyAction::class);
+    GAE\RouteBuilder::define($app);
 
     // standard LTI endpoints
     $app->group('/lti', function (Group $lti) {
