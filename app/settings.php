@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Application\Settings\Settings;
 use App\Application\Settings\SettingsInterface;
 use DI\ContainerBuilder;
-use Odan\Session\SessionInterface;
 
 return function (ContainerBuilder $containerBuilder) {
 
@@ -23,9 +22,10 @@ return function (ContainerBuilder $containerBuilder) {
                 // get Google Cloud Project ID and URL from local environment
                 Settings::PROJECT_ID => getenv('GOOGLE_CLOUD_PROJECT'),
                 Settings::PROJECT_URL => $PROJECT_URL,
+                Settings::LOGGER_NAME => $TOOL_NAME,
+                Settings::CACHE_DURATION => 3600, // seconds
                 Settings::TOOL_NAME => $TOOL_NAME,
                 Settings::SCOPES => $SCOPES,
-                Settings::CACHE_DURATION => 3600, // seconds
                 Settings::TOOL_REGISTRATION => [
                     'application_type' => 'web',
                     'client_name' => $TOOL_NAME,
@@ -70,15 +70,7 @@ return function (ContainerBuilder $containerBuilder) {
                         'https://canvas.instructure.com/lti/privacy_level' => 'public'
 
                     ]
-                ],
-                SessionInterface::class => [
-                    'name' => "php-session",
-                    'lifetime' => 60 * 60 * 24,
-                    'cookie_samesite' => 'None',
-                    'secure' => true,
-                    'httponly' => true
                 ]
-
             ]);
         }
     ]);

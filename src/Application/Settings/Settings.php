@@ -14,12 +14,18 @@ class Settings implements SettingsInterface
     public const TOOL_REGISTRATION = 'TOOL_REGISTRATION';
     public const SCOPES = 'SCOPES';
     public const CACHE_DURATION = 'CACHE_DURATION';
+    public const LOGGER_NAME = 'LOGGER_NAME';
 
     private array $settings;
 
     public function __construct(array $settings)
     {
         $this->settings = $settings;
+    }
+
+    public function getLoggerName(): string
+    {
+        return $this->settings[self::LOGGER_NAME];
     }
 
     /**
@@ -63,7 +69,7 @@ class Settings implements SettingsInterface
         return $this->settings[self::SCOPES];
     }
 
-    public function getDuration(): int
+    public function getCacheDuration(): int
     {
         return $this->settings[self::CACHE_DURATION];
     }
