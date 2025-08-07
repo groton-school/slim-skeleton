@@ -42,7 +42,7 @@
     "php": "^7.4 || ^8.0",
     "ext-json": "*",
     "dflydev/fig-cookies": "dev-feat/chips",
-    "groton-school/slim-gae-shim": "^1.0.1",
+    "groton-school/slim-gae-shim": "^1.1.0",
     "groton-school/slim-lti-infrastructure-gae": "^1.1.0",
     "groton-school/slim-lti-partitioned-session": "^1.1.0",
     "groton-school/slim-lti-shim": "^2.1.0",
