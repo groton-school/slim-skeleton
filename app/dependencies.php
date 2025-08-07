@@ -48,9 +48,11 @@ return function (ContainerBuilder $containerBuilder) {
 
 
         PhpRenderer::class => function (ContainerInterface $container) {
-            return new PhpRenderer(__DIR__ . '/../views', [
+            $views = new PhpRenderer(__DIR__ . '/../views', [
                 'tool_name' => $container->get(SettingsInterface::class)->get(Settings::TOOL_NAME)
             ]);
+            $views->setLayout('layout.php');
+            return $views;
         }
     ]);
 };
