@@ -44,7 +44,7 @@
     "dflydev/fig-cookies": "dev-feat/chips",
     "groton-school/slim-gae-shim": "^1.0.1",
     "groton-school/slim-lti-infrastructure-gae": "^1.1.0",
-    "groton-school/slim-lti-partitioned-session": "^1.0.0",
+    "groton-school/slim-lti-partitioned-session": "^1.1.0",
     "groton-school/slim-lti-shim": "^2.1.0",
     "monolog/monolog": "^2.9",
     "odan/session": "^6.3",
