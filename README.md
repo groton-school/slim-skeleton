@@ -11,7 +11,7 @@ This skeleton application was built for Composer. This makes setting up a new Sl
 Run this command from the directory in which you want to install your new Slim Framework application. You will require PHP 7.4 or newer.
 
 ```bash
-composer create-project --ask --stability dev --repository "{\"type\":\"vcs\",\"url\":\"https://github.com/groton-school/slim-skeleton\"}" groton-school/slim-skeleton "dev-lti/gae"
+composer create-project --ask --stability dev --repository "{\"type\":\"vcs\",\"url\":\"https://github.com/groton-school/slim-skeleton\"}" groton-school/slim-skeleton "dev-gae/lti-tool"
 ```
 
 You'll want to:
