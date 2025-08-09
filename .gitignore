@@ -6,6 +6,7 @@ nbproject/
 /coverage/
 # Vendor
 /vendor/
+/node_modules/
 # Logs
 /logs/*
 !/logs/README.md
@@ -17,3 +18,7 @@ cache.properties
 # Composer
 composer.phar
 composer.lock
+# Environment
+.env
+# groton-school/slim-gae-shim
+/*.bak

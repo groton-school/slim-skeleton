@@ -8,7 +8,6 @@ use DI\ContainerBuilder;
 use Monolog\Logger;
 
 return function (ContainerBuilder $containerBuilder) {
-
     // Global Settings Object
     $containerBuilder->addDefinitions([
         SettingsInterface::class => function () {
@@ -21,6 +20,9 @@ return function (ContainerBuilder $containerBuilder) {
                     'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
                     'level' => Logger::DEBUG,
                 ],
+                Settings::PROJECT_ID => getenv('GOOGLE_CLOUD_PROJECT'),
+                Settings::PROJECT_URL => 'https://' . getenv('HTTP_HOST'),
+                Settings::LOGGER_NAME => 'slim-skeleton/gae/app'
             ]);
         }
     ]);

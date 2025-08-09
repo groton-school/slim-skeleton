@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Application\Actions\User\ListUsersAction;
 use App\Application\Actions\User\ViewUserAction;
+use GrotonSchool\Slim\GAE;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -14,6 +15,8 @@ return function (App $app) {
         // CORS Pre-Flight OPTIONS Request Handler
         return $response;
     });
+
+    GAE\RouteBuilder::define($app);
 
     $app->get('/', function (Request $request, Response $response) {
         $response->getBody()->write('Hello world!');
