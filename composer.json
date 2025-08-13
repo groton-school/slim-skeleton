@@ -48,7 +48,7 @@
     "groton-school/slim-lti-infrastructure-gae": "^2.0.1",
     "groton-school/slim-lti-partitioned-session": "^1.3.2",
     "groton-school/slim-lti-shim": "^3.0",
-    "groton-school/slim-spa-oauth2-client": "dev-main",
+    "groton-school/slim-spa-oauth2-client": "^1.0",
     "monolog/monolog": "^2.9",
     "odan/session": "^6.4",
     "php-di/php-di": "^7.0",
