@@ -22,3 +22,6 @@ composer.lock
 !.env.example
 # Node
 /node_modules/
+# Webpack
+/public/
+/views/SPA.php

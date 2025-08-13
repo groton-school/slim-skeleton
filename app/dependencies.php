@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 use App\Application\Settings\Settings;
 use App\Application\Settings\SettingsInterface;
+use Battis\LazySecrets;
 use DI\ContainerBuilder;
+use GrotonSchool\OAuth2\Client\Provider\CanvasLMS;
 use GrotonSchool\Slim\GAE;
 use GrotonSchool\Slim\LTI;
 use GrotonSchool\Slim\LTI\Actions\RegistrationConfigureActionInterface;
 use GrotonSchool\Slim\LTI\Actions\RegistrationConfigurePassthruAction;
 use GrotonSchool\Slim\LTI\Infrastructure;
 use GrotonSchool\Slim\LTI\PartitionedSession;
+use GrotonSchool\Slim\SPA;
+use League\OAuth2\Client\Provider\AbstractProvider;
 use Psr\Container\ContainerInterface;
 use Slim\Views\PhpRenderer;
 
@@ -30,6 +34,7 @@ return function (ContainerBuilder $containerBuilder) {
         GAE\SettingsInterface::class => DI\get(SettingsInterface::class),
         LTI\SettingsInterface::class => DI\get(SettingsInterface::class),
         Infrastructure\GAE\SettingsInterface::class => DI\get(SettingsInterface::class),
+        SPA\OAuth2\Client\SettingsInterface::class => DI\get(SettingsInterface::class),
 
         /*
         * autowire registration configuration passthru (no interactive
@@ -46,13 +51,22 @@ return function (ContainerBuilder $containerBuilder) {
         */
         RegistrationConfigureActionInterface::class => DI\autowire(RegistrationConfigurePassthruAction::class),
 
-
         PhpRenderer::class => function (ContainerInterface $container) {
             $views = new PhpRenderer(__DIR__ . '/../views', [
                 'tool_name' => $container->get(SettingsInterface::class)->get(Settings::TOOL_NAME)
             ]);
             $views->setLayout('layout.php');
             return $views;
+        },
+
+        AbstractProvider::class => function (ContainerInterface $container) {
+            /** @var SettingsInterface $settings */
+            $settings = $container->get(SettingsInterface::class);
+            $secrets = new LazySecrets\Cache();
+            return new CanvasLMS([
+                ...$secrets->get('CANVAS_CREDENTIALS'),
+                'purpose' => $settings->getToolName()
+            ]);
         }
     ]);
 };

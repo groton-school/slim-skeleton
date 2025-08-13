@@ -33,8 +33,7 @@ class Authenticated implements MiddlewareInterface
         private SessionInterface $session,
         private UserRepositoryInterface $users,
         private PhpRenderer $views
-    ) {
-    }
+    ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

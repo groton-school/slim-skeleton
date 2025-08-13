@@ -3,25 +3,24 @@
 namespace App\Application\Actions;
 
 use App\Application\Middleware\Authenticated;
-use App\Application\Settings\SettingsInterface;
+use GrotonSchool\Slim\Norms\AbstractAction;
+use Packback\Lti1p3\LtiConstants;
 use Psr\Http\Message\ResponseInterface;
-use Slim\Http\Response;
 use Slim\Http\ServerRequest;
+use Slim\Http\Response;
 use Slim\Views\PhpRenderer;
 
-class AppStartAction
+class AppStartAction extends AbstractAction
 {
-    public function __construct(
-        private PhpRenderer $views,
-        private SettingsInterface $settings
-    ) {}
+    public function __construct(private PhpRenderer $views) {}
 
-    public function __invoke(ServerRequest $request, Response $response): ResponseInterface
+    protected function invokeHook(ServerRequest $request, Response $response, array $args = []): ResponseInterface
     {
-        return $this->views->render($response, 'app.php', [
-            'title' => $this->settings->getToolName(),
-            'user' => $request->getAttribute(Authenticated::USER),
-            'launchData' => $request->getAttribute(Authenticated::LAUNCH_MESSAGE)
+        return $this->views->render($response, 'SPA.php', [
+            'title' => 'Test',
+            "consumer_instance_url" => $request->getAttribute(
+                Authenticated::LAUNCH_MESSAGE
+            )[LtiConstants::LAUNCH_PRESENTATION]['return_url']
         ]);
     }
 }

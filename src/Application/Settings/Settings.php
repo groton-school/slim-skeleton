@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Application\Settings;
 
+use GrotonSchool\Slim\LTI;
 
-class Settings implements SettingsInterface
+class Settings extends LTI\PartitionedSession\DefaultSettings implements SettingsInterface
 {
     public const PROJECT_ID = 'PROJECT_ID';
     public const PROJECT_URL = 'PROJECT_URL';
@@ -21,6 +22,16 @@ class Settings implements SettingsInterface
     public function __construct(array $settings)
     {
         $this->settings = $settings;
+    }
+
+    public function getOAuth2AuthenticatedRedirectUrl(): string
+    {
+        return '/';
+    }
+
+    public function getOAuth2TokensCookieName(): string
+    {
+        return 'tokens';
     }
 
     public function getLoggerName(): string

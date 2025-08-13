@@ -7,11 +7,14 @@ namespace App\Application\Settings;
 use GrotonSchool\Slim\GAE;
 use GrotonSchool\Slim\LTI;
 use GrotonSchool\Slim\LTI\Infrastructure;
+use GrotonSchool\Slim\SPA;;
 
 interface SettingsInterface extends
     GAE\SettingsInterface,
     LTI\SettingsInterface,
-    Infrastructure\GAE\SettingsInterface
+    LTI\PartitionedSession\SettingsInterface,
+    Infrastructure\GAE\SettingsInterface,
+    Spa\OAuth2\Client\SettingsInterface
 {
     /**
      * @param string $key
