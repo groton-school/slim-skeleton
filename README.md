@@ -1,6 +1,6 @@
-# Slim Framework 4 on Google App Engine Skeleton LTI Tool
+# Slim Framework 4 on Google App Engine Skeleton LTI Tool providing Canvas LMS API proxy for a web app
 
-[![Coverage Status](https://coveralls.io/repos/github/groton-school/slim-lti-gae-skeleton/badge.svg?branch=master)](https://coveralls.io/github/groton-school/slim-lti-gae-skeleton?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/groton-school/slim-lti-gae-skeleton/badge.svg?branch=master)](https://coveralls.io/github/groton-school/slim-skeleton?branch=lti-tool_canvas-api-proxy)
 
 Use this skeleton application to quickly setup and start working on a new Slim Framework 4 application running on Google App Engine. This application uses the latest Slim 4 with Slim PSR-7 implementation and PHP-DI container implementation. It also uses Google Cloud Logging.
 
@@ -11,7 +11,7 @@ This skeleton application was built for Composer. This makes setting up a new Sl
 Run this command from the directory in which you want to install your new Slim Framework application. You will require PHP 7.4 or newer.
 
 ```bash
-composer create-project --ask --stability dev --repository "{\"type\":\"vcs\",\"url\":\"https://github.com/groton-school/slim-skeleton\"}" groton-school/slim-skeleton "dev-gae/lti-tool-spa"
+composer create-project --ask --stability dev --repository "{\"type\":\"vcs\",\"url\":\"https://github.com/groton-school/slim-skeleton\"}" groton-school/slim-skeleton "dev-gae/lti-tool_canvas-api-proxy"
 ```
 
 You'll want to:
