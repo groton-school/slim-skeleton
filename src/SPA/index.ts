@@ -1,78 +1,73 @@
-import Cookies from 'universal-cookie';
+import { Canvas } from '@groton/canvas-api.client.web';
 
-const cookies = new Cookies();
-const content = document.getElementById('content');
-const tokens = document.createElement('pre');
-
-function showTokens() {
-  tokens.innerHTML = JSON.stringify(
-    cookies.get('tokens') || 'No token is stored',
-    null,
-    2
-  );
-}
-
-const handlers = {
-  authorize: () => {
-    window.location.href = '/login/canvas/authorize';
-  },
-
-  refresh: async () => {
-    await fetch('/login/canvas/refresh');
-    showTokens();
-  },
-
-  deauthorize: (event: MouseEvent) => {
-    cookies.set('tokens', '', {
-      maxAge: 0,
-      path: '/',
-      partitioned: true,
-      secure: true,
-      sameSite: 'none'
-    });
-    (document.getElementById('authorize') as HTMLButtonElement).disabled =
-      false;
-    (document.getElementById('refresh') as HTMLButtonElement).disabled = true;
-    (event.target as HTMLButtonElement).disabled = true;
-    showTokens();
-  }
+type Action = {
+  name: string;
+  classList: string[];
+  handler: EventListener;
 };
 
-(async () => {
-  for (const text of Object.keys(handlers) as (keyof typeof handlers)[]) {
-    const authorized = cookies.get('tokens');
-    const button = document.createElement('button');
-    button.id = text;
-    button.innerText = text;
-    button.classList.add('btn', 'm-3');
-    switch (text) {
-      case 'authorize':
-        button.classList.add('btn-primary');
-        break;
-      case 'refresh':
-        button.classList.add('btn-secondary');
-        break;
-      case 'deauthorize':
-        button.classList.add('btn-danger');
-        break;
-    }
-    button.addEventListener('click', handlers[text]);
-    switch (text) {
-      case 'authorize':
-        if (authorized) {
-          button.disabled = true;
-        }
-        break;
-      default:
-        if (!authorized) {
-          button.disabled = true;
-        }
-    }
+// initialize Canvas API proxy
+Canvas.init();
 
+const content = document.getElementById('content');
+const display_id = 'display';
+
+const Authorize = 'Authorize';
+const actions: Action[] = [
+  {
+    name: Authorize,
+    classList: ['btn-primary'],
+    handler: () => Canvas.authorize()
+  },
+  {
+    name: 'Deauthorize',
+    classList: ['btn-danger'],
+    handler: () => Canvas.deauthorize()
+  },
+  {
+    name: 'Owner',
+    classList: ['btn-secondary'],
+    handler: async () => {
+      const user = await Canvas.getOwner();
+      const display =
+        document.getElementById(display_id) || document.createElement('pre');
+      display.id = display_id;
+      display.innerHTML = JSON.stringify(user, null, 2);
+      content?.appendChild(display);
+    }
+  },
+  {
+    name: 'Courses',
+    classList: ['btn-secondary'],
+    handler: async () => {
+      const courses = await Canvas.v1.Users.Courses.list({
+        pathParams: { user_id }
+      });
+      const display =
+        document.getElementById(display_id) || document.createElement('pre');
+      display.id = display_id;
+      display.innerHTML = JSON.stringify(courses, null, 2);
+      content?.appendChild(display);
+    }
+  }
+];
+
+(async () => {
+  // detect not authorized or authorized as different user (e.g. masquerading)
+  const owner = await Canvas.getOwner();
+  if (owner && owner.id != user_id) {
+    await Canvas.deauthorize();
+  }
+
+  // display actions
+  for (const action of actions) {
+    const button = document.createElement('button');
+    button.innerText = action.name;
+    button.classList.add('btn', 'm-2', ...action.classList);
+    button.disabled =
+      (action.name === Authorize && !!owner) ||
+      (action.name !== Authorize && !owner);
+    button.addEventListener('click', action.handler);
     content?.appendChild(button);
   }
-  tokens.setAttribute('lang', 'json');
-  content?.appendChild(tokens);
-
-  showTokens();
 })();

@@ -24,16 +24,6 @@ class Settings extends LTI\PartitionedSession\DefaultSettings implements Setting
         $this->settings = $settings;
     }
 
-    public function getOAuth2AuthenticatedRedirectUrl(): string
-    {
-        return '/';
-    }
-
-    public function getOAuth2TokensCookieName(): string
-    {
-        return 'tokens';
-    }
-
     public function getLoggerName(): string
     {
         return $this->settings[self::LOGGER_NAME];

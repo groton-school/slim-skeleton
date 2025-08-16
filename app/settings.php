@@ -21,7 +21,7 @@ return function (ContainerBuilder $containerBuilder) {
                 // get Google Cloud Project ID and URL from local environment
                 Settings::PROJECT_ID => getenv('GOOGLE_CLOUD_PROJECT'),
                 Settings::PROJECT_URL => $PROJECT_URL,
-                Settings::LOGGER_NAME => $TOOL_NAME,
+                Settings::LOGGER_NAME => preg_replace('/[^a-z0-9]+/', '-', $TOOL_NAME),
                 Settings::CACHE_DURATION => 3600, // seconds
                 Settings::TOOL_NAME => $TOOL_NAME,
                 Settings::SCOPES => $SCOPES,
