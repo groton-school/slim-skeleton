@@ -18,9 +18,7 @@ return function (App $app) {
     LTI\RouteBuilder::define($app)
         ->add(SessionStartMiddleware::class)
         ->add(PartitionedSessionMiddleware::class);
-    PartitionedSession\RouteBuilder::define($app)
-        ->add(SessionStartMiddleware::class)
-        ->add(PartitionedSessionMiddleware::class);
+    PartitionedSession\RouteBuilder::define($app);
 
     $app->get('/', AppStartAction::class)
         ->add(Authenticated::class)
