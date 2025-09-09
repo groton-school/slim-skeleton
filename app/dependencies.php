@@ -13,17 +13,18 @@ use GrotonSchool\Slim\LTI\Actions\RegistrationConfigureActionInterface;
 use GrotonSchool\Slim\LTI\Actions\RegistrationConfigurePassthruAction;
 use GrotonSchool\Slim\LTI\Infrastructure;
 use GrotonSchool\Slim\LTI\PartitionedSession;
-use GrotonSchool\Slim\OAuth2\APIProxy\Domain\Provider\ProviderInterface;
+use GrotonSchool\Slim\OAuth2\APIProxy;
+use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Slim\Views\PhpRenderer;
 
 return function (ContainerBuilder $containerBuilder) {
 
     // inject shim dependencies
-    LTI\Dependencies::inject($containerBuilder);
-    GAE\Dependencies::inject($containerBuilder);
-    PartitionedSession\Dependencies::inject(($containerBuilder));
-    Infrastructure\GAE\Dependencies::inject($containerBuilder);
+    (new LTI\Dependencies())->inject($containerBuilder);
+    (new GAE\Dependencies())->inject($containerBuilder);
+    (new PartitionedSession\Dependencies())->inject(($containerBuilder));
+    (new Infrastructure\GAE\Dependencies())->inject($containerBuilder);
 
     $containerBuilder->addDefinitions([
         // use default partitioned session settings
@@ -57,7 +58,7 @@ return function (ContainerBuilder $containerBuilder) {
             return $views;
         },
 
-        ProviderInterface::class => function (ContainerInterface $container) {
+        CanvasLMS\APIProxy::class => function (ContainerInterface $container) {
             /** @var SettingsInterface $settings */
             $settings = $container->get(SettingsInterface::class);
             $secrets = new LazySecrets\Cache();
@@ -65,6 +66,13 @@ return function (ContainerBuilder $containerBuilder) {
                 ...$secrets->get('CANVAS_CREDENTIALS'),
                 'purpose' => $settings->getToolName()
             ]);
+        },
+
+        'routes.canvas' => function (ContainerInterface $container) {
+            return new APIProxy\RouteBuilder(
+                $container->get(CanvasLMS\APIProxy::class),
+                $container->get(SessionInterface::class)
+            );
         }
     ]);
 };
