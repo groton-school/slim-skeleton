@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Application\Actions\AppStartAction;
+use App\Application\Middleware\ApiProxyUserIdentifier;
 use App\Application\Middleware\Authenticated;
 use GrotonSchool\Slim\GAE;
 use GrotonSchool\Slim\LTI;
@@ -19,7 +20,12 @@ return function (App $app) {
         ->add(SessionStartMiddleware::class)
         ->add(PartitionedSessionMiddleware::class);
     (new PartitionedSession\RouteBuilder())->define($app);
-    $app->getContainer()->get('routes.canvas')->define($app);
+    $app->getContainer()->get('routes.canvas')->define(
+        $app,
+        ApiProxyUserIdentifier::class,
+        Authenticated::class
+    )
+        ->add(PartitionedSessionMiddleware::class);
 
     $app->get('/', AppStartAction::class)
         ->add(Authenticated::class)

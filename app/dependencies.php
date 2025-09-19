@@ -14,6 +14,7 @@ use GrotonSchool\Slim\LTI\Actions\RegistrationConfigurePassthruAction;
 use GrotonSchool\Slim\LTI\Infrastructure;
 use GrotonSchool\Slim\LTI\PartitionedSession;
 use GrotonSchool\Slim\OAuth2\APIProxy;
+use GrotonSchool\Slim\OAuth2\APIProxy\GAE\Firestore\AccessTokenRepository;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Slim\Views\PhpRenderer;
@@ -62,10 +63,12 @@ return function (ContainerBuilder $containerBuilder) {
             /** @var SettingsInterface $settings */
             $settings = $container->get(SettingsInterface::class);
             $secrets = new LazySecrets\Cache();
-            return new CanvasLMS\APIProxy([
+            $proxy = new CanvasLMS\APIProxy([
                 ...$secrets->get('CANVAS_CREDENTIALS'),
                 'purpose' => $settings->getToolName()
             ]);
+            $proxy->setAccessTokenRepostory(new AccessTokenRepository($proxy));
+            return $proxy;
         },
 
         'routes.canvas' => function (ContainerInterface $container) {
