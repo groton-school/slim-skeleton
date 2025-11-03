@@ -1,5 +1,4 @@
 onlyBuiltDependencies:
-  - '@parcel/watcher'
   - gifsicle
   - jpegtran-bin
   - optipng-bin

@@ -1,13 +1,13 @@
+#!/usr/bin/env node
+
 import '@qui-cli/env/1Password.js';
 
 import gcloud from '@battis/partly-gcloudy';
-import input from '@inquirer/input';
 import { Colors } from '@qui-cli/colors';
 import { Core } from '@qui-cli/core';
 import { Log } from '@qui-cli/log';
 import { Root } from '@qui-cli/root';
 import { Shell } from '@qui-cli/shell';
-import { Validators } from '@qui-cli/validators';
 import path from 'node:path';
 
 (async () => {
@@ -29,8 +29,11 @@ import path from 'node:path';
   });
 
   if (configure) {
-    await gcloud.services.enable(gcloud.services.API.CloudFirestoreAPI);
+    await gcloud.app.update({ sslPolicy: 'TLS_VERSION_1_2' });
     await gcloud.services.enable(gcloud.services.API.CloudLoggingAPI);
+
+    // FIXME don't enable firestore unless necessary
+    await gcloud.services.enable(gcloud.services.API.CloudFirestoreAPI);
     const [{ name: database }] = JSON.parse(
       Shell.exec(
         `gcloud firestore databases list --project=${project.projectId} --format=json --quiet`
@@ -39,39 +42,9 @@ import path from 'node:path';
     Shell.exec(
       `gcloud firestore databases update --type=firestore-native --database="${database}" --project=${project.projectId} --format=json --quiet`
     );
-
-    // store Canvas credentials in a secret
-    const redirectUri = `https://${appEngine.defaultHostname}/login/canvas/redirect`;
-    Log.info(
-      `You need to create Developer API Key in canvas with the redirect URI ${Colors.url(
-        redirectUri
-      )}\n\nIf you haven't done that before, follow these directions: ${Colors.url(
-        'https://community.canvaslms.com/t5/Admin-Guide/How-do-I-add-a-developer-API-key-for-an-account/ta-p/259'
-      )}`
-    );
-
-    await gcloud.batch.secretsSetAndCleanUp({
-      name: 'CANVAS_CREDENTIALS',
-      value: JSON.stringify({
-        canvasInstanceUrl: await input({
-          message: 'Canvas instance URL',
-          validate: Validators.notEmpty
-        }),
-        clientId: await input({
-          message: 'Canvas API Key client ID',
-          validate: Validators.notEmpty
-        }),
-        clientSecret: await input({
-          message: 'Canvas API Key client secret',
-          validate: Validators.notEmpty
-        }),
-        redirectUri
-      }),
-      retainVersions: 1
-    });
-    await gcloud.secrets.enableAppEngineAccess();
   }
 
+  // FIXME make deploy script non-LTI specific
   Log.info(
     `Install your LTI by adding an LTI Registration in Developer Keys for ${Colors.url(
       `https://${appEngine.defaultHostname}/lti/register`
