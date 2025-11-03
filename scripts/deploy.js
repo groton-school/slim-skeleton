@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import '@qui-cli/env/1Password.js';
 
 import gcloud from '@battis/partly-gcloudy';
@@ -27,8 +29,11 @@ import path from 'node:path';
   });
 
   if (configure) {
-    await gcloud.services.enable(gcloud.services.API.CloudFirestoreAPI);
+    await gcloud.app.update({ sslPolicy: 'TLS_VERSION_1_2' });
     await gcloud.services.enable(gcloud.services.API.CloudLoggingAPI);
+
+    // FIXME don't enable firestore unless necessary
+    await gcloud.services.enable(gcloud.services.API.CloudFirestoreAPI);
     const [{ name: database }] = JSON.parse(
       Shell.exec(
         `gcloud firestore databases list --project=${project.projectId} --format=json --quiet`
@@ -39,6 +44,7 @@ import path from 'node:path';
     );
   }
 
+  // FIXME make deploy script non-LTI specific
   Log.info(
     `Install your LTI by adding an LTI Registration in Developer Keys for ${Colors.url(
       `https://${appEngine.defaultHostname}/lti/register`

@@ -85,7 +85,6 @@
   },
   "scripts": {
     "start": "php -S localhost:8080 -t public",
-    "test": "phpunit",
-    "post-update-cmd": "GrotonSchool\\Slim\\GAE\\Scripts::installGAEFiles"
+    "test": "phpunit"
   }
 }
